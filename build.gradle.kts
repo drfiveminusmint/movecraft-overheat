@@ -16,7 +16,7 @@ repositories {
 dependencies {
     api("org.jetbrains:annotations-java5:24.1.0")
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-    compileOnly("net.countercraft:movecraft:+")
+    compileOnly("net.countercraft:movecraft:8.0.0_beta-5_dev-1")
     compileOnly("net.countercraft.movecraft.combat:movecraft-combat:+")
 }
 

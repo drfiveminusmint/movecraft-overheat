@@ -1,17 +1,22 @@
 package net.countercraft.movecraft.movecraftoverheat.tracking;
 
 import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.features.status.events.CraftStatusUpdateEvent;
 import net.countercraft.movecraft.movecraftoverheat.MovecraftOverheat;
 import net.countercraft.movecraft.movecraftoverheat.config.Settings;
 import net.countercraft.movecraft.movecraftoverheat.disaster.Disaster;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
-public class HeatManager extends BukkitRunnable {
+public class HeatManager extends BukkitRunnable implements Listener {
     private final HashMap<Craft, CraftHeat> heatTracking = new HashMap<>();
     private final Queue<Disaster> disasterQueue = new ConcurrentLinkedQueue();
 
@@ -23,7 +28,6 @@ public class HeatManager extends BukkitRunnable {
             if (heat.getLastUpdate() + Settings.HeatCheckInterval >= time) {
                 continue;
             }
-            heat.recalculate();
             heat.processDissipation();
             heat.setLastUpdate(time);
             if (heat.getLastDisaster() + Settings.DisasterCheckInterval <= time) {
@@ -58,5 +62,13 @@ public class HeatManager extends BukkitRunnable {
 
     public void addDisaster (Disaster disaster) {
         disasterQueue.add(disaster);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onCraftStatusUpdate(@NotNull CraftStatusUpdateEvent event) {
+        if (!heatTracking.containsKey(event.getCraft()))
+            return;
+
+        heatTracking.get(event.getCraft()).recalculate();
     }
 }

@@ -117,6 +117,7 @@ public final class MovecraftOverheat extends JavaPlugin {
         }
 
         manager.runTaskTimer(this, 20, 1);
+        getServer().getPluginManager().registerEvents(manager, this);
     }
 
 

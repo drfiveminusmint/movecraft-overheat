@@ -58,7 +58,7 @@ public class WeaponFireListener implements Listener {
         if (craft == null) return;
         CraftHeat heat = MovecraftOverheat.getInstance().getHeatManager().getHeat(craft);
         if (heat != null) {
-            if (heat.isSilenced() && craft.getHitBox().contains(MathUtils.bukkit2MovecraftLoc(event.getBlock().getLocation()))) {
+            if (craft.getDataTag(CraftHeat.SILENCED) && craft.getHitBox().contains(MathUtils.bukkit2MovecraftLoc(event.getBlock().getLocation()))) {
                 event.setCancelled(true);
                 craft.getAudience().playSound(Sound.sound(Key.key("block.dispenser.fail"), Sound.Source.BLOCK, 1f, 1f));
             }
